@@ -9,7 +9,7 @@ cd arp-mitm.git
 
 pip install -r requirements.txt
 
-sudo python3 arp-mitm.py -h
+sudo python3 arpmitm.py -h
 ```
 
 
