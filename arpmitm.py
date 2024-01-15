@@ -10,6 +10,7 @@
 import os,sys,getopt
 import threading
 import scapy.all as scapy
+from time import sleep
 
 # <-- Termcolor -->
 RED = "\033[0;31m"
@@ -45,7 +46,8 @@ def scanlivehosts(network_range):
     #printing the info of the devices
     for info in clients:  
         print(f'Host {RED}{info[1].psrc}{WHITE} is up --> MAC: {RED}{info[1].hwsrc}{WHITE}')
-    sys.exit(1)
+    #sys.exit(1)
+    return
 
 #setting 0(default) to 1 to allow port forwarding
 def setportforwardingtoTrue():
@@ -77,6 +79,7 @@ def arppoisoning(target,gateway):
             arpspoofing(gateway,target) #spoofing the gateway
             PACKET += 2
             print(f'[+] ARP Packets Sent: {PACKET}',end = '\r')
+            sleep(1)
     
     except:
         pass
@@ -127,6 +130,9 @@ if __name__ == '__main__':
                             target = y
                         if x in ['-g','--gateway']:
                             gateway = y
+                        if x in ['-s','--scan']:
+                            scanlivehosts(y)
+                            sys.exit(1)
 
                     #target = '192.168.1.2'
                     #gateway = '192.168.1.1'
@@ -159,7 +165,7 @@ if __name__ == '__main__':
             
 
         except:
-            print('[+] Usage: sudo python3 arpmitm.py -i {interface} -t {target ip} -d {destination ip}')
+            print('[+] Usage: sudo python3 arpmitm.py -i {interface} -t {target ip} -g {gateway ip}')
             print('''
             -s {ip range} or --scan {ip range} --> [sudo python3 arpmitm.py --scan 192.168.0.0/24]
             -i {interface name} or --interface {interface name}
